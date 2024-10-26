@@ -38,8 +38,7 @@ type VaultWithDb struct {
 func NewVault(db Db, enc encrypt.Encrypt) *VaultWithDb {
 	// db := files.NewJsonDb("data.json")
 	file, err := db.Read()
-
-	if err != nil {
+	if err != nil || len(file) == 0 {
 		return &VaultWithDb{
 			Vault: Vault{
 				Accounts:  []Account{},
@@ -50,11 +49,13 @@ func NewVault(db Db, enc encrypt.Encrypt) *VaultWithDb {
 		}
 	}
 
+	data, _ := enc.Decrypt(file)
+
 	var vault Vault
-	err = json.Unmarshal(file, &vault)
+	err = json.Unmarshal(data, &vault)
 
 	if err != nil {
-		color.Red("Не удалось разобрать файл")
+		color.Red("Не удалось разобрать файл data.vault")
 		return &VaultWithDb{
 			Vault: Vault{
 				Accounts:  []Account{},
@@ -116,9 +117,10 @@ func (vault *Vault) ToBytes() ([]byte, error) {
 func (vault *VaultWithDb) Save() {
 	vault.UpdatedAt = time.Now()
 	data, err := vault.Vault.ToBytes()
+	encData, _ := vault.enc.Encrypt(data)
 	if err != nil {
 		color.Red("Не удалось перобразовать!")
 	}
 
-	vault.db.Write(data)
+	vault.db.Write(encData)
 }

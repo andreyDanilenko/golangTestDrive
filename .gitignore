@@ -1,2 +1,4 @@
 app-1
 .env
+go.mod
+go.sum

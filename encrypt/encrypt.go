@@ -4,7 +4,6 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
-	"errors"
 	"io"
 	"os"
 )
@@ -39,9 +38,9 @@ func (enc *Encrypt) Encrypt(plainStr []byte) ([]byte, error) {
 	// криптографический случайный генератор rand.Reader чтобы заполнить этот nonce
 	// nonce - вектор инициализации для каждой операции шифрования.
 	nonce := make([]byte, aesGCM.NonceSize())
-	_, err = io.ReadFull(rand.Reader, nonce)
-	if err != nil {
-		return nil, err
+	_, err1 := io.ReadFull(rand.Reader, nonce)
+	if err1 != nil {
+		return nil, err1
 	}
 	// nonce – место, куда будет записан результат. Здесь используется сам nonce, чтобы добавить его в начало зашифрованного текста.
 	// nonce – вектор инициализации, который должен быть уникальным для каждого вызова шифрования.
@@ -63,10 +62,6 @@ func (enc *Encrypt) Decrypt(encryptedStr []byte) ([]byte, error) {
 	}
 
 	nonceSize := aesGCM.NonceSize()
-	if len(encryptedStr) < nonceSize {
-		return nil, errors.New("ciphertext is too short")
-	}
-
 	nonce, ciphertext := encryptedStr[:nonceSize], encryptedStr[nonceSize:]
 	plainStr, err := aesGCM.Open(nil, nonce, ciphertext, nil)
 	if err != nil {
