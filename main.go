@@ -22,7 +22,7 @@ func main() {
 		output.PrintError("Не удалось гнайти env файл")
 	}
 
-	vault := account.NewVault(files.NewJsonDb("data.vault"), *encrypt.NewEnrypter())
+	vault := account.NewVault(files.NewJsonDb("data.json"), *encrypt.NewEnrypter())
 
 Loop:
 	for {
