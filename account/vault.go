@@ -73,11 +73,41 @@ func NewVault(db Db, enc encrypt.Encrypt) *VaultWithDb {
 	}
 }
 
-func (vault *VaultWithDb) FindAccountDyUrl(url string) []Account {
+// / код дублируется
+// func (vault *VaultWithDb) FindAccountByUrl(url string) []Account {
+// 	var accounts []Account
+
+// 	for _, account := range vault.Accounts {
+// 		isMatched := strings.Contains(account.Url, url)
+// 		if isMatched {
+// 			accounts = append(accounts, account)
+// 		}
+// 	}
+
+// 	return accounts
+// }
+
+// func (vault *VaultWithDb) FindAccountByLogin(login string) []Account {
+// 	var accounts []Account
+
+// 	for _, account := range vault.Accounts {
+// 		isMatched := strings.Contains(account.Login, login)
+// 		if isMatched {
+// 			accounts = append(accounts, account)
+// 		}
+// 	}
+
+// 	return accounts
+// }
+
+// /
+func (vault *VaultWithDb) FindAccount(str string, checker func(Account, string) bool) []Account {
 	var accounts []Account
 
 	for _, account := range vault.Accounts {
-		isMatched := strings.Contains(account.Url, url)
+		// isMatched := strings.Contains(account.Url, url)
+		isMatched := checker(account, str)
+
 		if isMatched {
 			accounts = append(accounts, account)
 		}
