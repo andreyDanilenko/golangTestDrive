@@ -147,10 +147,10 @@ func (vault *Vault) ToBytes() ([]byte, error) {
 func (vault *VaultWithDb) Save() {
 	vault.UpdatedAt = time.Now()
 	data, err := vault.Vault.ToBytes()
-	// encData, _ := vault.enc.Encrypt(data)
+
+	encData := vault.enc.Encrypt(data)
 	if err != nil {
 		color.Red("Не удалось перобразовать!")
 	}
-
-	vault.db.Write(data)
+	vault.db.Write(encData)
 }

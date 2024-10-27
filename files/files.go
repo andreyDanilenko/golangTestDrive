@@ -34,7 +34,6 @@ func (db JsonDb) Write(content []byte) {
 	}
 
 	defer file.Close()
-
 	_, err = file.Write(content)
 	if err != nil {
 		file.Close()
