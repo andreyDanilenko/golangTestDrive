@@ -108,24 +108,18 @@ func findAccount(vault *account.VaultWithDb, variant string) {
 	// 	return strings.Contains(acc.Url, str)
 	// })
 
-	if len(accounts) == 0 {
+	getInfo(&accounts)
+}
+
+func getInfo(accounts *[]account.Account) {
+	if len(*accounts) == 0 {
 		color.Red("Аккаунтов нет!")
 	}
 
-	for _, account := range accounts {
+	for _, account := range *accounts {
 		account.Output()
 	}
 }
-
-// func getInfo(accounts account.Account) {
-// 	if len(accounts) == 0 {
-// 		color.Red("Аккаунтов нет!")
-// 	}
-
-// 	for _, account := range accounts {
-// 		account.Output()
-// 	}
-// }
 
 // func checkUrl(acc account.Account, str string) bool {
 // 	return strings.Contains(acc.Url, str)
